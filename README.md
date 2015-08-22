@@ -11,7 +11,7 @@
 
 ###Требования к CMS ModX:
 * редакция Revolution 2.x
-* компонент Shopkeeper 3.0.x
+* компонент Shopkeeper 3.0+
 * компонент FormIt
 
 ###Установка модуля
