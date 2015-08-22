@@ -1,5 +1,4 @@
 <?php
-$eventName = $modx->event->name;
 $_isAdmin = ($modx->user->sudo == 1);
 
 if(!defined('YANDEXMONEY_PATH')) define('YANDEXMONEY_PATH', MODX_CORE_PATH."components/yandexmoney/");
@@ -8,8 +7,6 @@ require_once YANDEXMONEY_PATH.'model/yandexmoney.class.php';
 $snippet = $modx->getObject('modSnippet',array('name'=>'YandexMoney'));
 $config = $snippet->getProperties();
 
-
-
 $ym = new Yandexmoney($modx, $config);
 
 if(!empty($_SESSION['shk_lastOrder']) && !empty($_SESSION['shk_lastOrder']['id'])){
@@ -17,20 +14,21 @@ if(!empty($_SESSION['shk_lastOrder']) && !empty($_SESSION['shk_lastOrder']['id']
     $order_id = (int)$_SESSION['shk_lastOrder']['id'];    
 }
 if (!empty($_POST['payment'])){
-	$ym->pay_method = $_POST['payment'];
+    $ym->pay_method = $_POST['payment'];
 }
 if (!$ym->checkPayMethod()){
-	return false;
+    return false;
 }
 
-$modx->addPackage('shopkeeper', MODX_CORE_PATH."components/shopkeeper/model/");
-$order = $modx->getObject('SHKorder',array('id'=>$order_id));
+$modx->addPackage('shopkeeper3', MODX_CORE_PATH."components/shopkeeper3/model/");
+$order = $modx->getObject('shk_order',array('id'=>$order_id));
+
 if (!$order){
- return false;
+    return false;
 }
 $output = '';
 
-if ($order_id && $_POST['order']){
+if ( $order_id ){
     $ym->userId = $modx->getLoginUserID('web') ? $modx->getLoginUserID('web') : 0;
     $ym->orderId = $order_id;
     $ym->orderTotal = $_SESSION['shk_lastOrder']['price'];
@@ -48,4 +46,3 @@ if ($order_id && $_POST['order']){
 }
 
 return $output;
-?>

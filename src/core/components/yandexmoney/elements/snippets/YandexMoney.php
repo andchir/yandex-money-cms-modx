@@ -1,5 +1,4 @@
 <?php
-$eventName = $modx->event->name;
 $_isAdmin = ($modx->user->sudo == 1);
 
 if(!defined('YANDEXMONEY_PATH')) define('YANDEXMONEY_PATH', MODX_CORE_PATH."components/yandexmoney/");
@@ -12,12 +11,15 @@ if(!empty($_SESSION['shk_lastOrder']) && !empty($_SESSION['shk_lastOrder']['id']
     $order_id = (int)$_SESSION['shk_lastOrder']['id'];    
 }
 if (!empty($_POST['payment'])){
-	$ym->pay_method = $_POST['payment'];
+    $ym->pay_method = $_POST['payment'];
 }
 
 if ($scriptProperties['action']=='showMethods') {
-	$org_mode = ($scriptProperties['mode'] == 2);
-	$output = $ym->getSelectHtml();
-	return $output;
+    $org_mode = ($scriptProperties['mode'] == 2);
+    $output = $ym->getSelectHtml();
+    return $output;
 }
-?>
+else if($scriptProperties['action']=='startPayment') {
+    $output = $ym->createFormHtml();
+    return $output;
+}
